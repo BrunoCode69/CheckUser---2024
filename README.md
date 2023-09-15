@@ -3,5 +3,7 @@
 bash <(curl -sL https://raw.githubusercontent.com/BrunoCode69/CheckUser---2024/main/install.sh)
 ```
 
-
+# Menu inicial
 ![Menu principal](https://i.imgur.com/5AEETGT.png)
+
+* Esse script foi feito utilizando modulos nativos.

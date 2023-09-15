@@ -58,7 +58,7 @@ start_check_user() {
       sleep 2s
       menu
     else
-      jq '.listen_port = $porta' $HOME/check_user/config.json > temp.json && mv temp.json $HOME/check_user/config.json
+      jq --arg porta "$porta" '.listen_port = $porta' $HOME/check_user/config.json > temp.json && mv temp.json $HOME/check_user/config.json
       echo -e "\n${cyan}Iniciando checkuser na porta $porta${tag}"
       pm2 start $HOME/check_user/index.js >/dev/null
       echo -e "\n${cyan}Checkuser iniciado com sucesso.${tag}"

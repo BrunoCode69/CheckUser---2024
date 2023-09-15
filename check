@@ -1,0 +1,123 @@
+#!/bin/bash
+vermelho="\033[0;31m"
+verde="\033[0;32m"
+azul="\033[0;34m"
+cyan="\033[0;36m"
+branco="\033[1;37m"
+tag="\033[0m"
+
+menu() {
+  clear
+  status=$(pm2 list | grep -o "online\|stopped")
+
+  if [[ $status == "online" ]]; then
+  status="${verde}LIGADO${tag}"
+  else
+  status="${vermelho}DESLIGADO${tag}"
+  fi
+
+  echo -e "${cyan}CHECKUSER 2024 - @Bruno_VPN${tag}\n"
+  echo -e "${cyan}STATUS CHECKUSER: $status ${tag}\n"
+  echo -e "${branco}[01]${tag} - Iniciar/Parar checkuser"
+  echo -e "${branco}[02]${tag} - Reiniciar checkuser"
+  echo -e "${branco}[03]${tag} - Desistalar checkuser"
+  echo -e "${branco}[00]${tag} - Sair\n"
+
+  read -p "Digite uma opção: " response
+
+  case $response in
+    1)
+      start_check_user
+      ;;
+    2)
+      restart_check_user
+      ;;
+    3)
+      uninstall_check_user
+      ;;
+    0)
+      ;;
+    *)
+      echo -e "\n${vermelho}Opção inválida...${tag}"
+      sleep 0.5s
+      menu
+      ;;
+  esac
+}
+
+start_check_user() {
+  clear
+  status=$(pm2 list | grep -o "online\|stopped")
+  if [[ $status == "stopped" || -z $status ]]; then
+    echo -e "${cyan}Informe a porta${tag}: \c"
+    read response
+    porta=$response
+
+    if netstat -tuln | grep ":$porta " >/dev/null; then
+      echo -e "\n${vermelho}A porta $porta está em uso.${tag}"
+      sleep 2s
+      menu
+    else
+      jq '.listen_port = $porta' $HOME/check_user/config.json > temp.json && mv temp.json $HOME/check_user/config.json
+      echo -e "\n${cyan}Iniciando checkuser na porta $porta${tag}"
+      pm2 start $HOME/check_user/index.js >/dev/null
+      echo -e "\n${cyan}Checkuser iniciado com sucesso.${tag}"
+      sleep 1s
+      menu
+    fi
+  else
+   stop_check_user
+  fi
+}
+
+restart_check_user() {
+  clear
+  status=$(pm2 list | grep -o "online\|stopped")
+  if [[ $status == "stopped" || -z $status ]]; then
+    echo -e "\n${vermelho}Não é possível reiniciar o checkuser, pois ele está desligado.${tag}"
+    sleep 2s
+    menu
+  else
+    echo -e "\n${cyan}Reiniciando checkuser${tag}"
+    pm2 restart $HOME/check_user/index.js >/dev/null
+    echo -e "\n${cyan}Checkuser reiniciado com sucesso.${tag}"
+    sleep 1s
+    menu
+  fi
+}
+
+stop_check_user() {
+   echo -e "\n${cyan}Desligando checkuser${tag}"
+   pm2 stop $HOME/check_user/index.js >/dev/null
+   echo -e "\n${cyan}Checkuser desligado com sucesso.${tag}"
+   sleep 1s
+   menu
+}
+
+uninstall_check_user() {
+  clear
+  echo -e "${cyan}Deseja apagar o checkuser? (s/n)${tag}: \c"
+  read response
+    
+  case $response in
+    "s")
+      clear
+      echo -e "\n${cyan}Desinstalando checkuser${tag}"
+      pm2 stop $HOME/check_user/index.js >/dev/null
+      rm -r $HOME/check_user >/dev/null
+      rm -r /bin/check >/dev/null
+      echo -e "\n${cyan}Checkuser desinstalado com sucesso.${tag}"
+      sleep 1s
+      ;;
+    "n")
+      menu
+      ;;
+    *)
+      echo -e "\n${vermelho}Opção inválida. Voltando ao menu principal.${tag}"
+      sleep 2s
+      menu
+      ;;
+  esac
+}
+
+menu

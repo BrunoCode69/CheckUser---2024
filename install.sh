@@ -20,7 +20,7 @@ npm install pm2 --global > /dev/null 2>&1
 cd $HOME
 wget https://raw.githubusercontent.com/BrunoCode69/CheckUser---2024/main/check > /dev/null 2>&1
 chmod 777 check
-mv check > /bin/check > /dev/null 2>&1
+mv check /bin/check > /dev/null 2>&1
 chmod 777 /bin/check > /dev/null 2>&1
 clear
 echo -e "${cyan}CHECKUSER INSTALADO COM SUCESSO.${tag}"

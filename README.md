@@ -4,4 +4,4 @@ bash <(curl -sL https://raw.githubusercontent.com/BrunoCode69/CheckUser---2024/m
 ```
 
 
-[Imgur](https://imgur.com/5AEETGT)
+![Menu principal](https://i.imgur.com/5AEETGT.png)

@@ -6,4 +6,4 @@ bash <(curl -sL https://raw.githubusercontent.com/BrunoCode69/CheckUser---2024/m
 # Menu inicial
 ![Menu principal](https://i.imgur.com/5AEETGT.png)
 
-* Esse script foi feito utilizando modulos nativos.
+* Este script em JavaScript utiliza apenas módulos nativos, não sendo necessário nenhuma biblioteca externa para sua execução.
